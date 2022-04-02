@@ -1,20 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
-get_ipython().system('mkdir tmp')
-
-
-# In[ ]:
-
-
-get_ipython().system('ls -la')
-
-
-# In[1]:
-
 
 class SignalModel(object):
 
