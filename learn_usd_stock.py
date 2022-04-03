@@ -319,7 +319,7 @@ date_end = "2022-01-01 00:00:00"
 date_start_test = "2022-01-01 00:00:00"
 date_end_test = "2022-06-01 00:00:00"
 
-path_to_orders_file = f'csv/all_calc/{currency}_order'
+# path_to_orders_file = f'csv/all_calc/{currency}_order'
 
 
 # In[6]:
@@ -373,7 +373,7 @@ def get_all_data_ticekr(ticker_list, timeframe):
                 'timeframe': timeframe,
                 'crop_options': 'False'
             }
-            url = f"{host}:{base_port}/get_all_data_ticekr"
+            url = f"{host}:{base_port}/get_all_data_ticekr_fast"
             res = json.loads(requests.post(url=url, data=data).text)
             df = pd.DataFrame(res)
             df = df.set_index('datetime')
@@ -432,42 +432,42 @@ all_data_ticker = get_all_data_ticekr(
 # In[ ]:
 
 
-import itertools
+# import itertools
 
-perm_set = itertools.permutations(all_data_ticker.keys(), 2)
-res_ticker_list = list()
-stop_ticker_list = list()
+# perm_set = itertools.permutations(all_data_ticker.keys(), 2)
+# res_ticker_list = list()
+# stop_ticker_list = list()
 
-_len = 0
-for i in tqdm(perm_set): _len += 1
+# _len = 0
+# for i in tqdm(perm_set): _len += 1
     
-print(f"len perm_set: {_len}")
+# print(f"len perm_set: {_len}")
 
-perm_set = itertools.permutations(all_data_ticker.keys(), 2)
-for i in tqdm(perm_set):
-#     if stop_ticker_list:
-    res_ticker_list.append((i[0], i[1]))
+# perm_set = itertools.permutations(all_data_ticker.keys(), 2)
+# for i in tqdm(perm_set):
+# #     if stop_ticker_list:
+#     res_ticker_list.append((i[0], i[1]))
 
-#     stop_ticker_list.append(i[0])
-#     stop_ticker_list = list(set(stop_ticker_list))
+# #     stop_ticker_list.append(i[0])
+# #     stop_ticker_list = list(set(stop_ticker_list))
     
-print(f"res len: {len(res_ticker_list)}")
+# print(f"res len: {len(res_ticker_list)}")
 
 
 # In[ ]:
 
 
-all_pair_stock = list()
-for item in tqdm(res_ticker_list):
-    all_pair_stock.append((item[0], item[1]))
+# all_pair_stock = list()
+# for item in tqdm(res_ticker_list):
+#     all_pair_stock.append((item[0], item[1]))
 
 
 # In[ ]:
 
 
-all_pair_stock = pd.DataFrame(all_pair_stock)
-all_pair_stock = all_pair_stock.rename(columns={0: 'ticker_1', 1: 'ticker_2', 2: 'corr'})
-all_pair_stock['value']  = [0.2 for i in range(len(all_pair_stock))]
+# all_pair_stock = pd.DataFrame(all_pair_stock)
+# all_pair_stock = all_pair_stock.rename(columns={0: 'ticker_1', 1: 'ticker_2', 2: 'corr'})
+# all_pair_stock['value']  = [0.2 for i in range(len(all_pair_stock))]
 
 
 # ## Функции
@@ -680,7 +680,7 @@ def check_ticker_position(ticker_position, old_ticker_position):
 
 def calc_tow_stock(df, ticker_1, ticker_2):
     index = 0
-#     print(f"START: {ticker_1} - {ticker_2}")
+    # print(f"START: {ticker_1} - {ticker_2}")
     ticker_position = dict()
     old_ticker_position = dict()
     
@@ -838,22 +838,22 @@ orders = dict()
 
 cluster_client = ClusterServiseClient()
 
-print(f"Всего итераций: {len(all_pair_stock)}")
-for index, row in tqdm(all_pair_stock.iterrows()):
-    if '@' not in row['ticker_1'] and '@' not in row['ticker_2']:
-        if cluster_client.check_done_ticker(
-            ticker_1=row['ticker_1'], 
-            ticker_2=row['ticker_2'], 
-        currency=currency) == 'True':
-            
-            order = calc_tow_stock(
-                df=all_data_ticker,
-                ticker_1=row['ticker_1'],
-                ticker_2=row['ticker_2']
-            )
-    else:
-        print(f"Error; {row['ticker_2']}-{row['ticker_2']}")
-#         orders[f"{row['ticker_1']}-{row['ticker_2']}"] = order
+while True:
+    try:
+        data = requests.get(f"http://95.165.139.159:5001/get_ticker1_ticker2")
+        tickers = json.loads(data.text)
+        print(tickers)
+        ticker_1 = tickers['ticker_1']
+        ticker_2 = tickers['ticker_2']
+
+        order = calc_tow_stock(
+            df=all_data_ticker,
+            ticker_1=ticker_1,
+            ticker_2=ticker_2
+        )
+    except:
+        continue
+    # break
         
 
 
