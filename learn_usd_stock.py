@@ -311,7 +311,7 @@ corr_k = 0.0
 
 window = 200
 
-currency = "RUB"
+currency = "USD"
 
 date_start = "2021-06-01 00:00:00"
 date_end = "2022-01-01 00:00:00"
