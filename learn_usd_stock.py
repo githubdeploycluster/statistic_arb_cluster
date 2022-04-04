@@ -839,26 +839,26 @@ orders = dict()
 cluster_client = ClusterServiseClient()
 
 while True:
-    # try:
-    data = requests.get(f"http://95.165.139.159:5001/get_ticker1_ticker2")
-    tickers = json.loads(data.text)
-    print(tickers)
-    ticker_1 = tickers['ticker_1']
-    ticker_2 = tickers['ticker_2']
+    try:
+        data = requests.get(f"http://95.165.139.159:5001/get_ticker1_ticker2")
+        tickers = json.loads(data.text)
+        print(tickers)
+        ticker_1 = tickers['ticker_1']
+        ticker_2 = tickers['ticker_2']
 
-    df = get_all_data_ticekr(
-        ticker_list = [ticker_1, ticker_2],
-        timeframe = timeframe
-    )
+        df = get_all_data_ticekr(
+            ticker_list = [ticker_1, ticker_2],
+            timeframe = timeframe
+        )
 
-    order = calc_tow_stock(
-        df=df,
-        ticker_1=ticker_1,
-        ticker_2=ticker_2
-    )
-    # except:
-    #     continue
-    break
+        order = calc_tow_stock(
+            df=df,
+            ticker_1=ticker_1,
+            ticker_2=ticker_2
+        )
+    except:
+        continue
+    # break
         
 
 
