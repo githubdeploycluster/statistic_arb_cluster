@@ -37,139 +37,150 @@ class SignalModel(object):
       deal_id = 0
 
       position = None
-      for index, row in df.iterrows():
 
-          if row['signal'] == "Open Long" and not position:
-              deal_id += 1
-              order_1['buy'] = row[ticker_1]
-              order_1['datetime_buy'] = index
-              order_1['deal_id'] = deal_id
-              order_1['ticker'] = ticker_1.split('_')[0]
-              order_1['position_open'] = 'open long'
+      if len(df) > 0:
 
-              order_tmp['ticker'] = ticker_1.split('_')[0]
-              order_tmp['price'] = row[ticker_1]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'open long'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
-              #             print("OPEN LONG")
+        signal_list = df['signal'].tolist()
+        row_ticker_1 = df[ticker_1].tolist()
+        row_ticker_2 = df[ticker_2].tolist()
+        index_list = df.index
 
-              order_2['shell'] = row[ticker_2]
-              order_2['datetime_shell'] = index
-              order_2['deal_id'] = deal_id
-              order_2['ticker'] = ticker_2.split('_')[0]
-              order_2['position_open'] = 'open short'
+        for i in range(len(signal_list)):
+        #   for index, row in df.iterrows():
+        
 
-              order_tmp['ticker'] = ticker_2.split('_')[0]
-              order_tmp['price'] = row[ticker_2]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'open short'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
+            if signal_list[i] == "Open Long" and not position:
+                deal_id += 1
+                order_1['buy'] = row_ticker_1[i]
+                order_1['datetime_buy'] = index_list[i]
+                order_1['deal_id'] = deal_id
+                order_1['ticker'] = ticker_1.split('_')[0]
+                order_1['position_open'] = 'open long'
 
-              position = True
+                order_tmp['ticker'] = ticker_1.split('_')[0]
+                order_tmp['price'] = row_ticker_1[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'open long'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
+                #             print("OPEN LONG")
 
-          if row['signal'] == "Close Long" and position:
-              order_1['shell'] = row[ticker_1]
-              order_1['datetime_shell'] = index
-              order_1['ticker'] = ticker_1.split('_')[0]
-              order_1['position_close'] = 'close long'
-              order_list.append(order_1)
+                order_2['shell'] = row_ticker_2[i]
+                order_2['datetime_shell'] = index_list[i]
+                order_2['deal_id'] = deal_id
+                order_2['ticker'] = ticker_2.split('_')[0]
+                order_2['position_open'] = 'open short'
 
-              order_tmp['ticker'] = ticker_1.split('_')[0]
-              order_tmp['price'] = row[ticker_1]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'close long'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
+                order_tmp['ticker'] = ticker_2.split('_')[0]
+                order_tmp['price'] = row_ticker_2[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'open short'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
 
-              order_2['buy'] = row[ticker_2]
-              order_2['datetime_buy'] = index
-              order_2['ticker'] = ticker_2.split('_')[0]
-              order_2['position_close'] = 'close short'
-              order_list.append(order_2)
+                position = True
 
-              order_tmp['ticker'] = ticker_2.split('_')[0]
-              order_tmp['price'] = row[ticker_2]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'close short'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
+            if signal_list[i] == "Close Long" and position:
+                order_1['shell'] = row_ticker_1[i]
+                order_1['datetime_shell'] = index_list[i]
+                order_1['ticker'] = ticker_1.split('_')[0]
+                order_1['position_close'] = 'close long'
+                order_list.append(order_1)
 
-              order_1 = dict()
-              order_2 = dict()
+                order_tmp['ticker'] = ticker_1.split('_')[0]
+                order_tmp['price'] = row_ticker_1[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'close long'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
 
-              position = None
+                order_2['buy'] = row_ticker_2[i]
+                order_2['datetime_buy'] = index_list[i]
+                order_2['ticker'] = ticker_2.split('_')[0]
+                order_2['position_close'] = 'close short'
+                order_list.append(order_2)
 
-          if row['signal'] == "Open Short" and not position:
-              deal_id += 1
-              order_2['buy'] = row[ticker_2]
-              order_2['datetime_buy'] = index
-              order_2['deal_id'] = deal_id
-              order_2['ticker'] = ticker_2.split('_')[0]
-              order_2['position_open'] = 'open long'
+                order_tmp['ticker'] = ticker_2.split('_')[0]
+                order_tmp['price'] = row_ticker_2[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'close short'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
 
-              order_tmp['ticker'] = ticker_2.split('_')[0]
-              order_tmp['price'] = row[ticker_2]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'open long'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
+                order_1 = dict()
+                order_2 = dict()
 
-              order_1['shell'] = row[ticker_1]
-              order_1['datetime_shell'] = index
-              order_1['deal_id'] = deal_id
-              order_1['ticker'] = ticker_1.split('_')[0]
-              order_1['position_open'] = 'open short'
+                position = None
 
-              order_tmp['ticker'] = ticker_1.split('_')[0]
-              order_tmp['price'] = row[ticker_1]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'open short'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
+            if signal_list[i] == "Open Short" and not position:
+                deal_id += 1
+                order_2['buy'] = row_ticker_2[i]
+                order_2['datetime_buy'] = index_list[i]
+                order_2['deal_id'] = deal_id
+                order_2['ticker'] = ticker_2.split('_')[0]
+                order_2['position_open'] = 'open long'
 
-              position = True
+                order_tmp['ticker'] = ticker_2.split('_')[0]
+                order_tmp['price'] = row_ticker_2[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'open long'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
 
-          if row['signal'] == "Close Short" and position:
-              order_2['shell'] = row[ticker_2]
-              order_2['datetime_shell'] = index
-              order_2['ticker'] = ticker_2.split('_')[0]
-              order_2['position_close'] = 'close long'
-              order_list.append(order_2)
+                order_1['shell'] = row_ticker_1[i]
+                order_1['datetime_shell'] = index_list[i]
+                order_1['deal_id'] = deal_id
+                order_1['ticker'] = ticker_1.split('_')[0]
+                order_1['position_open'] = 'open short'
 
-              order_tmp['ticker'] = ticker_2.split('_')[0]
-              order_tmp['price'] = row[ticker_2]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'close long'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
+                order_tmp['ticker'] = ticker_1.split('_')[0]
+                order_tmp['price'] = row_ticker_1[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'open short'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
 
-              order_1['buy'] = row[ticker_1]
-              order_1['datetime_buy'] = index
-              order_1['ticker'] = ticker_1.split('_')[0]
-              order_1['position_close'] = 'close short'
-              order_list.append(order_1)
+                position = True
 
-              order_tmp['ticker'] = ticker_1.split('_')[0]
-              order_tmp['price'] = row[ticker_1]
-              order_tmp['datetime'] = index
-              order_tmp['position_open'] = 'close short'
-              order_list_1.append(order_tmp)
-              order_tmp = dict()
+            if signal_list[i] == "Close Short" and position:
+                order_2['shell'] = row_ticker_2[i]
+                order_2['datetime_shell'] = index_list[i]
+                order_2['ticker'] = ticker_2.split('_')[0]
+                order_2['position_close'] = 'close long'
+                order_list.append(order_2)
 
-              order_1 = dict()
-              order_2 = dict()
+                order_tmp['ticker'] = ticker_2.split('_')[0]
+                order_tmp['price'] = row_ticker_2[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'close long'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
 
-              position = None
+                order_1['buy'] = row_ticker_1[i]
+                order_1['datetime_buy'] = index_list[i]
+                order_1['ticker'] = ticker_1.split('_')[0]
+                order_1['position_close'] = 'close short'
+                order_list.append(order_1)
+
+                order_tmp['ticker'] = ticker_1.split('_')[0]
+                order_tmp['price'] = row_ticker_1[i]
+                order_tmp['datetime'] = index_list[i]
+                order_tmp['position_open'] = 'close short'
+                order_list_1.append(order_tmp)
+                order_tmp = dict()
+
+                order_1 = dict()
+                order_2 = dict()
+
+                position = None
 
       order_df = pd.DataFrame(order_list)
-
       if len(order_df):
-          order_df['PP'] = (order_df['shell'] - order_df['buy'] -                             order_df['shell'] * comission - order_df['buy'] * comission) / order_df['buy']
+        order_df['PP'] = (order_df['shell'] - order_df['buy'] - order_df['shell'] * comission - order_df['buy'] * comission) / order_df['buy']
 
       order_df_1 = pd.DataFrame(order_list_1)
+        
+    #   print(order_df_1.head())
 
       return order_df, order_df_1
 
@@ -615,6 +626,7 @@ def check_result(ticker_1, ticker_2, value, norm_df, df):
     
     
     _ = list()
+
     for index, row in calc_df.iterrows():
         if row['signal'] != None:
             _.append(row)
@@ -640,11 +652,15 @@ def check_result(ticker_1, ticker_2, value, norm_df, df):
 
         pp_final_list = list()
 
-        for index, row in orderbook_df.iterrows():
-            if row['time_in_deal'] < delta_time:
-                pp_final = row['PP'] - 0.090 / 100 * (abs(row['time_in_deal'].days) + 1)
+        PP_lsit = orderbook_df['PP'].tolist()
+        time_in_deal_list = orderbook_df['time_in_deal'].tolist()
+
+        # for index, row in orderbook_df.iterrows():
+        for i in range(len(PP_lsit)):
+            if time_in_deal_list[i] < delta_time:
+                pp_final = PP_lsit[i] - 0.090 / 100 * (abs(time_in_deal_list[i].days) + 1)
             else:
-                pp_final = row['PP']
+                pp_final = PP_lsit[i]
 
             pp_final_list.append(pp_final)
 
